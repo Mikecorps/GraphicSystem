@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewBag.Title = "ConectionDB";
+}
+
+<h2>ConectionDB</h2>
+
+<div class="portlet box green" ng-app="aplication" ng-controller="general" ng-cloak>
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="fa fa-gift"></i>Conecte a una BD SqlServer
+        </div>
+        <div class="tools">
+            <a href="javascript:;" class="collapse"> </a>
+            <a href="#portlet-config" data-toggle="modal" class="config"> </a>
+            <a href="javascript:;" class="reload"> </a>
+            <a href="javascript:;" class="remove"> </a>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <!-- BEGIN FORM-->
+        <form action="#" class="form-horizontal">
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Servidor</label>
+                    <div class="col-md-4">
+                        <input id="server" type="text" ng-model="server"  class="form-control input-circle" placeholder="Direccion del servidor">
+                        
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Usuario</label>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon input-circle-left">
+                                <i class="fa fa-user"></i>
+                            </span>
+                            <input id="user" type="text"  ng-model="user"   class="form-control input-circle-right" placeholder="Usuario">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Password</label>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <input id="pass" type="password" ng-model="pass"   class="form-control input-circle" placeholder="Password">
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <button id="ok" ng-click="fetchDB()" class="btn btn-circle green">Conectar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!-- END FORM-->
+    </div>
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        
+        var AngularDta = angular.module('aplication',[]);
+        AngularDta.controller('general', function ($scope, $http) {
+            $scope.server = "";
+            $scope.user = "";
+            $scope.pass = "";
+            $scope.fetchDB = function () {
+                var parameters = {
+                    server: $scope.server,
+                    user: $scope.user,
+                    pass:$scope.pass
+                };
+                var config = { params: parameters };
+                $http.get('/GetData/conection',config)
+                    .then(function successCallback(response) {
+                        window.location = "/GetData/TablesView";
+                    }, function errorCallback(response) {
+
+                });
+            }
+        });
+    </script>
+    }

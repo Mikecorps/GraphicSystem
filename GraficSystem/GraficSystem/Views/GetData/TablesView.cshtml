@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewBag.Title = "TablesView";
+}
+
+<h2>TablesView</h2>
+<div class="row" ng-app="table">
+    <div class="col-md-12" ng-controller="view" ng-cloak>
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet light portlet-fit bordered">
+            
+            <div id="pick" class="col-lg-12" style="display:flex">
+                <select id="single" class="form-control select2" ng-change="getTables()" ng-model="db1">
+                    <option ng-repeat="DB in DBs" id="{{DB.id}}" value="{{DB.id}}">{{DB.name}}</option>
+                </select>
+                <select id="singlet" class="form-control select2" ng-change="fields()" ng-model="tab">
+                    <option ng-repeat="table in tables" id="{{table.id}}" value="{{table.id}}">{{table.name}}</option>
+                </select>
+            </div>
+
+            <div class="portlet-body">
+                <div class="table-toolbar">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="btn-group">
+                                <button id="sample_editable_1_new" class="btn green">
+                                    Add New
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <table class="table table-striped table-hover table-bordered" contenteditable="true" id="sample_editable_1">
+                    <thead>
+                        <tr id="tableFields">
+                            <th ng-repeat="head in heads">{{head.val}}</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rows">
+                        <tr ng-repeat="dataRow in dataRows track by $index">
+                            <td ng-repeat="item in dataRow.Value track by $index">{{item}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="portlet light portlet-fit bordered" ng-controller="charts">
+            <div class="portlet-title">
+                <form novalidate>
+                    <sections style="display:flex">
+                        <label class="alert-info btn col-lg-2">Tipo de Grafica</label>
+                        <label class="btn alert-info col-lg-2">Datos a Graficar</label>
+                    </sections>
+                    <section style="display:block">
+                        <select class="select2-dropdown col-lg-2" ng-change="show()" ng-model="config.type1" ng-options="typeOption for typeOption in typeOptions"></select>
+                        <select multiple class="select2-dropdown col-lg-2" ng-change="show()" ng-options="head for head in heads" ng-model="value.heads"></select>
+                    </section>
+                </form>
+
+            </div>
+            <div id="d3">
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+
+<script src="~/scripts/jquery-ui.js"></script>
+<script src="~/Scripts/checklist-model.js"></script>
+<script src="~/Scripts/SqlCharts.js"></script>
+}

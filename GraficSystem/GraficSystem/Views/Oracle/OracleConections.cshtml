@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewBag.Title = "OracleConections";
+}
+
+<h2>OracleConections</h2>
+<div class="portlet box green" ng-app="OracleConections">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="fa fa-gift"></i>Conecte a una BD de Oracle
+        </div>
+        <div class="tools">
+            <a href="javascript:;" class="collapse"> </a>
+            <a href="#portlet-config" data-toggle="modal" class="config"> </a>
+            <a href="javascript:;" class="reload"> </a>
+            <a href="javascript:;" class="remove"> </a>
+        </div>
+    </div>
+    <div class="portlet-body form" ng-controller="conection">
+        <!-- BEGIN FORM-->
+        <form action="#" class="form-horizontal">
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Servidor</label>
+                    <div class="col-md-4">
+                        <input type="text" ng-model="dataSource" class="form-control input-circle" placeholder="Servidor" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Puerto</label>
+                    <div class="col-md-4">
+                        <input type="text" ng-model="puerto" class="form-control input-circle" placeholder="Puerto" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Nombre del servicio</label>
+                    <div class="col-md-4">
+                        <input type="text" ng-model="SSID" class="form-control input-circle" placeholder="Service Name" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Usuario</label>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon input-circle-left">
+                                <i class="fa fa-user"></i>
+                            </span>
+                            <input type="text" ng-model="UserId" class="form-control input-circle-right" placeholder="Usuario">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Password</label>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <input type="password" ng-model="pass" class="form-control input-circle" placeholder="Password">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <button ng-click="conect()" class="btn btn-circle green">Conectar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!-- END FORM-->
+    </div>
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        var module = angular.module('OracleConections', []);
+        module.controller('conection', function ($scope, $http) {
+            $scope.dataSource = "";
+            $scope.puerto = "";
+            $scope.SSID = "";
+            $scope.UserId = "";
+            $scope.name= "" ;
+            $scope.pass = "";
+            $scope.conect = function () {
+                var parameters = {
+                    host: $scope.dataSource,
+                    port: $scope.puerto,
+                    ssid: $scope.SSID,
+                    user: $scope.UserId,
+                    pass: $scope.pass
+                };
+                var config = { params: parameters };
+                $http.get('/Oracle/conect', config)
+                .then(function succesCallback(response) {
+                    window.location = "/Oracle/OracleDataView";
+                }, function errorCallback(response) { });
+
+               
+            };
+
+          
+        });
+
+        
+    </script>
+}

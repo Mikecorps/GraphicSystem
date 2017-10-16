@@ -1,0 +1,124 @@
+﻿
+@{
+    ViewBag.Title = "Graficas";
+}
+
+<h2>Graficas</h2>
+<div class="row">
+    <div class="col-lg-12 col-xs-12 col-sm-12">
+        <div class="portlet light ">
+            <div class="portlet-title">
+                <div class="caption">
+                    <span class="caption-subject bold uppercase font-dark">Revenue</span>
+                    <span class="caption-helper">distance stats...</span>
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default" href="#">
+                        <i class="icon-cloud-upload"></i>
+                    </a>
+                    <a class="btn btn-circle btn-icon-only btn-default" href="#">
+                        <i class="icon-wrench"></i>
+                    </a>
+                    <a class="btn btn-circle btn-icon-only btn-default" href="#">
+                        <i class="icon-trash"></i>
+                    </a>
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div id="output">
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12 col-xs-12 col-sm-12" ng-app="chart">
+        <div class="portlet light" ng-controller="plott">
+            <div class="portlet-title">
+                <form novalidate>
+                    <sections style="display:flex">
+                        <label class="alert-info btn col-lg-2">Tipo de Grafica</label>
+                        <label class="btn alert-info col-lg-2">Datos a Graficar</label>
+                    </sections>
+                    <section style="display:block">
+                        <select class="select2-dropdown col-lg-2" ng-change="show()" ng-model="config.type1" ng-options="typeOption for typeOption in typeOptions"></select>
+                        <select multiple class="select2-dropdown col-lg-2" ng-change="show()" ng-options="head for head in heads" ng-model="value.heads"></select>
+                    </section>
+                </form>
+
+            </div>
+            <div id="d3">
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src="~/scripts/pivot.js"></script>
+    <script src="~/scripts/jquery-ui.js"></script>
+    
+    <script src="~/scripts/tips_data.min.js"></script>
+    <script src="~/Scripts/checklist-model.js"></script>
+   
+    <script src="~/scripts/angular-dragdrop.min.js"></script>
+    <script src="~/scripts/ui-bootstrap-2.5.0.min.js"></script>
+    <script type="text/javascript">
+    $(function () {
+        $("#output").pivotUI(
+              $.pivotUtilities.tipsData, {
+                  width:50,
+                  rows: ["sex"],
+                  cols: ["smoker"],
+                  vals: ["tip", "total_bill"],
+                  aggregatorName: "Sum over Sum",
+                  rendererName: "Bar Chart",
+                  rendererOptions: {
+                      c3: {
+                          size: { height:300, width:600}
+                      }
+                  },
+                  renderers: $.extend(
+                      $.pivotUtilities.renderers,
+                    $.pivotUtilities.c3_renderers
+                  )
+        });
+    });
+    var D3Char = angular.module('chart', ['checklist-model']);
+
+    D3Char.controller('plott', function ($scope) {
+        //Configuracio
+        $scope.chart = null;
+        $scope.config = {};
+        $scope.heads = ['upload', 'download', 'total'];
+        $scope.typeOptions = ["line", "bar", "spline", "step", "area"];
+        $scope.config.type1 = $scope.typeOptions[0];
+        $scope.value = {
+            heads: ['total']};
+        //funciones
+        $scope.show = function () {
+            var SCO = $scope.value;
+            var config = {};
+            config.bindto = '#d3';
+            config.data = {};
+            config.data.json = [
+                    { "name": 'www.site1.com', "upload": 200, "download": 200, "total": 400 },
+                { "name": 'www.site2.com', "upload": 100, "download": 300, "total": 400 },
+                { "name": 'www.site3.com', "upload": 300," download": 200, "total": 500 },
+                { "name": 'www.site4.com', "upload": 400, "download": 100, "total": 500 },
+            ];
+            config.data.keys = { "value": $scope.value.heads };
+            config.axis = { "y": { "label": { "text": "Numero de items", "position": "outer-middle" } } };
+            config.data.type =  $scope.config.type1 ;
+            config.zoom = { enabled: true };
+            $scope.chart = c3.generate(config);
+        }
+    });
+    </script>
+}
+
